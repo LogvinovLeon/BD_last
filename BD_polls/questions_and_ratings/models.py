@@ -33,7 +33,7 @@ class Question(QuestionRatingMixin):
 
     def get_results(self):
         answers = QuestionAnswer.objects.filter(question=self)
-        return dict((answer, answer.questionvote_set.count()) for answer in answers)
+        return dict((answer.text, answer.questionvote_set.count()) for answer in answers)
 
 
 class QuestionAnswer(models.Model):

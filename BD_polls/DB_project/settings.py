@@ -34,9 +34,11 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-
-
-
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
 
 ROOT_URLCONF = 'DB_project.urls'
 
@@ -83,7 +85,6 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -93,7 +94,8 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.user.CurrentUserMiddleware',
     'cms.middleware.page.CurrentPageMiddleware',
     'cms.middleware.toolbar.ToolbarMiddleware',
-    'cms.middleware.language.LanguageCookieMiddleware'
+    'cms.middleware.language.LanguageCookieMiddleware',
+    'questions_and_ratings.disable.DisableCSRF',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -108,7 +110,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.request',
     'django.core.context_processors.media',
-    'django.core.context_processors.csrf',
     'django.core.context_processors.tz',
     'sekizai.context_processors.sekizai',
     'django.core.context_processors.static',
@@ -215,3 +216,4 @@ MIGRATION_MODULES = {
     'djangocms_video': 'djangocms_video.migrations_django'
 }
 
+COMMENTS_APP = 'cmsplugin_comments'
