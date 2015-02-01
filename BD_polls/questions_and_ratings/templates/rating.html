@@ -1,133 +1,115 @@
 {% load sekizai_tags cms_tags %}
-<h1>{% render_model rating "text" %}</h1>
-<div id="rating_form_{{ rating.id }}" style="display: {{ results|yesno:"none, block" }}">
-    {% if rating.type == "SLIDER" %}
-        <p>
-            <label for="rating{{ rating.id }}">Value:</label>
-            <input type="text" id="rating{{ rating.id }}" style="border:0; font-weight:bold;" value="1">
-        </p>
+{% if user and not user.is_anonymous %}
+    <h1>{% render_model rating "text" %}</h1>
+    <div id="rating_form_{{ rating.id }}" style="display: {{ results|yesno:"none, block" }}">
+        {% if rating.type == "SLIDER" %}
+            <p>
+                <label for="rating{{ rating.id }}">Value:</label>
+                <input type="text" id="rating{{ rating.id }}" style="border:0; font-weight:bold;" value="1">
+            </p>
 
-        <div id="slider{{ rating.id }}"></div>
-        <button class="btn btn-default">Submit</button>
-    {% else %}
-        <form id="rating_form">
-            <fieldset class="stars_rating">
-                <legend>Please rate:</legend>
-                <input type="radio" id="star5" name="answers" value="5"/>
-                <label for="star5" title="Rocks!">5 stars</label>
-                <input type="radio" id="star4" name="answers" value="4"/>
-                <label for="star4" title="Pretty good">4 stars</label>
-                <input type="radio" id="star3" name="answers" value="3"/>
-                <label for="star3" title="Meh">3 stars</label>
-                <input type="radio" id="star2" name="answers" value="2"/>
-                <label for="star2" title="Kinda bad">2 stars</label>
-                <input type="radio" id="star1" name="answers" value="1"/>
-                <label for="star1" title="Sucks big time">1 star</label>
-            </fieldset>
-            <input type="submit" class="btn btn-default"/>
-        </form>
-        <br>
-    {% endif %}
-</div>
-<div id="rating_answers_{{ rating.id }}" style="display: {{ results|yesno:"block, none" }}">
-    {% if results %}
-        {% for key, value in results.iteritems %}
-            <p>{{ key }}:{{ value }}</p>
-        {% endfor %}
-    {% endif %}
-</div>
-{% addtoblock "css" %}
-    <style>
-        .stars_rating {
-            float: left;
-        }
+            <div id="slider{{ rating.id }}"></div>
+            <button class="btn btn-default">Submit</button>
+        {% else %}
+            <form id="rating_form">
+                <fieldset class="stars_rating">
+                    <legend>Please rate:</legend>
+                    <input type="radio" id="star5" name="answers" value="5"/>
+                    <label for="star5" title="Rocks!">5 stars</label>
+                    <input type="radio" id="star4" name="answers" value="4"/>
+                    <label for="star4" title="Pretty good">4 stars</label>
+                    <input type="radio" id="star3" name="answers" value="3"/>
+                    <label for="star3" title="Meh">3 stars</label>
+                    <input type="radio" id="star2" name="answers" value="2"/>
+                    <label for="star2" title="Kinda bad">2 stars</label>
+                    <input type="radio" id="star1" name="answers" value="1"/>
+                    <label for="star1" title="Sucks big time">1 star</label>
+                </fieldset>
+                <input type="submit" class="btn btn-default"/>
+            </form>
+            <br>
+        {% endif %}
+    </div>
+    <div id="rating_answers_{{ rating.id }}" style="display: {{ results|yesno:"block, none" }}">
+        {% if results %}
+            {% for key, value in results.iteritems %}
+                <p>{{ key }}:{{ value }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+    {% addtoblock "css" %}
+        <style>
+            .stars_rating {
+                float: left;
+            }
 
-        /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
-           follow these rules. Every browser that supports :checked also supports :not(), so
-           it doesn’t make the test unnecessarily selective */
-        .stars_rating:not(:checked) > input {
-            position: absolute;
-            top: -9999px;
-            clip: rect(0, 0, 0, 0);
-        }
+            /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
+               follow these rules. Every browser that supports :checked also supports :not(), so
+               it doesn’t make the test unnecessarily selective */
+            .stars_rating:not(:checked) > input {
+                position: absolute;
+                top: -9999px;
+                clip: rect(0, 0, 0, 0);
+            }
 
-        .stars_rating:not(:checked) > label {
-            float: right;
-            width: 1em;
-            padding: 0 .1em;
-            overflow: hidden;
-            white-space: nowrap;
-            cursor: pointer;
-            font-size: 200%;
-            line-height: 1.2;
-            color: #ddd;
-            text-shadow: 1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0, 0, 0, .5);
-        }
+            .stars_rating:not(:checked) > label {
+                float: right;
+                width: 1em;
+                padding: 0 .1em;
+                overflow: hidden;
+                white-space: nowrap;
+                cursor: pointer;
+                font-size: 200%;
+                line-height: 1.2;
+                color: #ddd;
+                text-shadow: 1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0, 0, 0, .5);
+            }
 
-        .stars_rating:not(:checked) > label:before {
-            content: '★ ';
-        }
+            .stars_rating:not(:checked) > label:before {
+                content: '★ ';
+            }
 
-        .stars_rating > input:checked ~ label {
-            color: #f70;
-            text-shadow: 1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0, 0, 0, .5);
-        }
+            .stars_rating > input:checked ~ label {
+                color: #f70;
+                text-shadow: 1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0, 0, 0, .5);
+            }
 
-        .stars_rating:not(:checked) > label:hover,
-        .stars_rating:not(:checked) > label:hover ~ label {
-            color: gold;
-            text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
-        }
+            .stars_rating:not(:checked) > label:hover,
+            .stars_rating:not(:checked) > label:hover ~ label {
+                color: gold;
+                text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
+            }
 
-        .stars_rating > input:checked + label:hover,
-        .stars_rating > input:checked + label:hover ~ label,
-        .stars_rating > input:checked ~ label:hover,
-        .stars_rating > input:checked ~ label:hover ~ label,
-        .stars_rating > label:hover ~ input:checked ~ label {
-            color: #ea0;
-            text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
-        }
+            .stars_rating > input:checked + label:hover,
+            .stars_rating > input:checked + label:hover ~ label,
+            .stars_rating > input:checked ~ label:hover,
+            .stars_rating > input:checked ~ label:hover ~ label,
+            .stars_rating > label:hover ~ input:checked ~ label {
+                color: #ea0;
+                text-shadow: 1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0, 0, 0, .5);
+            }
 
-        .stars_rating > label:active {
-            position: relative;
-            top: 2px;
-            left: 2px;
-        }
-    </style>
-{% endaddtoblock %}
-{% addtoblock "js" %}
-    <script>
-        var func{{ rating.id }} = function () {
-            var form = $("#rating_form_" + {{ rating.id }});
-            var answers = $("#rating_answers_" +{{ rating.id }});
-            var show_form = function () {
-                answers.css("display", "none");
-                form.css("display", "block");
-            };
-            var show_answers = function () {
-                form.css("display", "none");
-                answers.css("display", "block");
-            };
-            var cancelButton = $('<button class="btn btn-default">').text("Cancel Vote").click(
-                    function () {
-                        $.ajax({
-                            type: "POST",
-                            url: "{% url 'rating' rating.id %}",
-                            success: show_form
-                        });
-                    }
-            );
-            {% if results %}
-                answers.append(cancelButton);
-            {% endif %}
-            var populate_results = function (data) {
-                show_answers();
-                var results = JSON.parse(data);
-                answers.empty();
-                for (var option in results) {
-                    answers.append($('<p>').text(option + ':' + results[option]));
-                }
-                answers.append($('<button class="btn btn-default">').text("Cancel Vote").click(
+            .stars_rating > label:active {
+                position: relative;
+                top: 2px;
+                left: 2px;
+            }
+        </style>
+    {% endaddtoblock %}
+    {% addtoblock "js" %}
+        <script>
+            var func{{ rating.id }} = function () {
+                var form = $("#rating_form_" + {{ rating.id }});
+                var answers = $("#rating_answers_" +{{ rating.id }});
+                var show_form = function () {
+                    answers.css("display", "none");
+                    form.css("display", "block");
+                };
+                var show_answers = function () {
+                    form.css("display", "none");
+                    answers.css("display", "block");
+                };
+                var cancelButton = $('<button class="btn btn-default">').text("Cancel Vote").click(
                         function () {
                             $.ajax({
                                 type: "POST",
@@ -135,49 +117,72 @@
                                 success: show_form
                             });
                         }
-                ));
-            };
-            $(function () {
-                $("#slider" +{{ rating.id }}).slider({
-                    min: 1,
-                    max: {{ rating.max }},
-                    animate: true,
-                    slide: function (event, ui) {
-                        $("#rating" +{{ rating.id }}).val(ui.value);
+                );
+                {% if results %}
+                    answers.append(cancelButton);
+                {% endif %}
+                var populate_results = function (data) {
+                    show_answers();
+                    var results = JSON.parse(data);
+                    answers.empty();
+                    for (var option in results) {
+                        answers.append($('<p>').text(option + ':' + results[option]));
                     }
-                });
-            });
-            {% if rating.type == "SLIDER" %}
-                form.select("button").click(function (event) {
-                    $.ajax({
-                        type: "POST",
-                        url: "{% url 'rating' rating.id %}",
-                        data: {"answers": $("#slider" +{{ rating.id }}).slider("option", "value")},
-                        success: populate_results,
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            answers.empty();
-                            answers.append($('<p>').text(errorThrown));
-                            answers.append(cancelButton);
+                    answers.append($('<button class="btn btn-default">').text("Cancel Vote").click(
+                            function () {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{% url 'rating' rating.id %}",
+                                    success: show_form
+                                });
+                            }
+                    ));
+                };
+                $(function () {
+                    $("#slider" +{{ rating.id }}).slider({
+                        min: 1,
+                        max: {{ rating.max }},
+                        animate: true,
+                        slide: function (event, ui) {
+                            $("#rating" +{{ rating.id }}).val(ui.value);
                         }
                     });
                 });
-            {% else %}
-                form.children().submit(function (event) {
-                    $.ajax({
-                        type: "POST",
-                        url: "{% url 'rating' rating.id %}",
-                        data: {"answers": form.children().serialize().substr(8)},
-                        success: populate_results,
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            answers.empty();
-                            answers.append($('<p>').text(errorThrown));
-                            answers.append(cancelButton);
-                        }
+                {% if rating.type == "SLIDER" %}
+                    form.select("button").click(function (event) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{% url 'rating' rating.id %}",
+                            data: {"answers": $("#slider" +{{ rating.id }}).slider("option", "value")},
+                            success: populate_results,
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                answers.empty();
+                                answers.append($('<p>').text(errorThrown));
+                                answers.append(cancelButton);
+                            }
+                        });
                     });
-                    event.preventDefault();
-                });
-            {% endif %}
-        };
-        func{{ rating.id }}();
-    </script>
-{% endaddtoblock %}
+                {% else %}
+                    form.children().submit(function (event) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{% url 'rating' rating.id %}",
+                            data: {"answers": form.children().serialize().substr(8)},
+                            success: populate_results,
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                answers.empty();
+                                answers.append($('<p>').text(errorThrown));
+                                answers.append(cancelButton);
+                            }
+                        });
+                        event.preventDefault();
+                    });
+                {% endif %}
+            };
+            func{{ rating.id }}();
+        </script>
+    {% endaddtoblock %}
+{% else %}
+    <h4>The user is not logged in. You should log in, if you want to vote.</h4>
+    <a href="{% url 'social:begin' 'usosweb' %}?next={{ request.path }}">Login with Usosweb</a>
+{% endif %}

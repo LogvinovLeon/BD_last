@@ -14,8 +14,9 @@ urlpatterns = i18n_patterns('',
                             url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap',
                                 {'sitemaps': {'cmspages': CMSSitemap}}),
                             url(r'^questions_and_ratings/', include(questions_and_ratings.urls)),
-                            url(r'^comments/', include('django.contrib.comments.urls')),
-                            url(r'^comments/', include('captcha.urls')),
+                            url(r'^', include('social.apps.django_app.urls', namespace='social')),
+                            url(r'^login/$', 'views.login'),
+                            url(r'^logout/$', 'views.logout'),
                             url(r'^', include('cms.urls')),
 )
 

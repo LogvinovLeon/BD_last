@@ -217,3 +217,5 @@ MIGRATION_MODULES = {
 }
 
 COMMENTS_APP = 'cmsplugin_comments'
+
+from config import *

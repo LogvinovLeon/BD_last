@@ -12,6 +12,9 @@
 <body style="padding-top:60px">
 {% cms_toolbar %}
 <div class="container">
+    {% if user and not user.is_anonymous %}
+        <a href="/logout" backgrou><img src="/media/gtfo.jpg"></a>
+    {% endif %}
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">

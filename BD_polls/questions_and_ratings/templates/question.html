@@ -1,56 +1,49 @@
 {% load sekizai_tags cms_tags %}
-<h1>{% render_model question "text" %}</h1>
-<div id="question_form_{{ question.id }}">
-    <form id="question_form" style="display: {{ results|yesno:"none,block" }}">
-        {% for answer in question.questionanswer_set.all %}
-            <input type="{{ question.multiple_answers|yesno:"checkbox,radio" }}" name="answers"
-                   id="answer{{ forloop.counter }}" value="{{ answer.id }}"/>
-            <label for="answer{{ forloop.counter }}">{{ answer.text }}</label>
-            <br/>
-        {% endfor %}
-        <input type="submit" class="btn btn-default"/>
-    </form>
-</div>
-<div id="question_answers_{{ question.id }}" style="display: {{ results|yesno:"block, none" }}">
-    {% if results %}
-        {% for key, value in results.iteritems %}
-            <p>{{ key }}:{{ value }}</p>
-        {% endfor %}
-    {% endif %}
-</div>
-<script>
-    var func{{ question.id }} = function () {
-        var form = $("#question_form_" + {{ question.id }} +" > form");
-        var answers = $("#question_answers_" +{{ question.id }});
-        var show_form = function () {
-            answers.css("display", "none");
-            form.css("display", "block");
-        };
-        var show_answers = function () {
-            form.css("display", "none");
-            answers.css("display", "block");
-        };
-        var cancelButton = $('<button class="btn btn-default">').text("Cancel Vote").click(
-                function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "{% url 'question' question.id %}",
-                        success: show_form
-                    });
-                }
-        );
+{% if user and not user.is_anonymous %}
+    <h1>{% render_model question "text" %}</h1>
+    <div id="question_form_{{ question.id }}">
+        <form id="question_form" style="display: {{ results|yesno:"none,block" }}">
+            {% for answer in question.questionanswer_set.all %}
+                <input type="{{ question.multiple_answers|yesno:"checkbox,radio" }}" name="answers"
+                       id="answer{{ forloop.counter }}" value="{{ answer.id }}" _text="{{ answer.text }}"/>
+                <label for="answer{{ forloop.counter }}">{{ answer.text }}</label>
+                <br/>
+            {% endfor %}
+            <input type="submit" class="btn btn-default"/>
+        </form>
+    </div>
+    <div id="question_answers_{{ question.id }}" style="display: {{ results|yesno:"block, none" }}">
         {% if results %}
-            answers.append(cancelButton);
+            {% for key, value in results.iteritems %}
+                <p>{{ key }}:{{ value }}</p>
+            {% endfor %}
         {% endif %}
-        var populate_results = function (data) {
-            show_answers();
-            var results = JSON.parse(data);
-            answers.empty();
-            for (var option in results) {
-                answers.append($('<p>').text(option + ':' + results[option]));
-            }
-            console.log(cancelButton);
-            answers.append($('<button class="btn btn-default">').text("Cancel Vote").click(
+    </div>
+    <script>
+        var func{{ question.id }} = function () {
+            var form = $("#question_form_" + {{ question.id }} +" > form");
+            var answers = $("#question_answers_" +{{ question.id }});
+            var show_form = function () {
+                answers.css("display", "none");
+                form.css("display", "block");
+            };
+            var show_answers = function () {
+                form.css("display", "none");
+                answers.css("display", "block");
+                checked = [];
+                form.children("input").each(function () {
+                    if ($(this).prop('checked')) {
+                        checked.push($(this).attr("_text"));
+                    }
+                });
+                console.log(checked);
+                answers.children("p").each(function () {
+                    if (checked.indexOf($(this).text().split(":")[0]) != -1) {
+                        $(this).css("font-weight", "bold");
+                    }
+                });
+            };
+            var cancelButton = $('<button class="btn btn-default">').text("Cancel Vote").click(
                     function () {
                         $.ajax({
                             type: "POST",
@@ -58,22 +51,45 @@
                             success: show_form
                         });
                     }
-            ));
-        };
-        $("#question_form_" + {{ question.id }}).submit(function (event) {
-            $.ajax({
-                type: "POST",
-                url: "{% url 'question' question.id %}",
-                data: form.serialize(),
-                success: populate_results,
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    answers.empty();
-                    answers.append($('<p>').text(errorThrown));
-                    answers.append(cancelButton);
+            );
+            {% if results %}
+                answers.append(cancelButton);
+            {% endif %}
+            var populate_results = function (data) {
+                show_answers();
+                var results = JSON.parse(data);
+                answers.empty();
+                for (var option in results) {
+                    answers.append($('<p>').text(option + ':' + results[option]));
                 }
+                answers.append($('<button class="btn btn-default">').text("Cancel Vote").click(
+                        function () {
+                            $.ajax({
+                                type: "POST",
+                                url: "{% url 'question' question.id %}",
+                                success: show_form
+                            });
+                        }
+                ));
+            };
+            $("#question_form_" + {{ question.id }}).submit(function (event) {
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'question' question.id %}",
+                    data: form.serialize(),
+                    success: populate_results,
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        answers.empty();
+                        answers.append($('<p>').text(errorThrown));
+                        answers.append(cancelButton);
+                    }
+                });
+                event.preventDefault();
             });
-            event.preventDefault();
-        });
-    };
-    func{{ question.id }}();
-</script>
+        };
+        func{{ question.id }}();
+    </script>
+{% else %}
+    <h4>The user is not logged in. You should log in, if you want to vote.</h4>
+    <a href="{% url 'social:begin' 'usosweb' %}?next={{ request.path }}">Login with Usosweb</a>
+{% endif %}
