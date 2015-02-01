@@ -1,4 +1,5 @@
 import os
+
 gettext = lambda s: s
 DATA_DIR = os.path.dirname(os.path.dirname(__file__))
 """
@@ -13,6 +14,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -94,6 +96,11 @@ MIDDLEWARE_CLASSES = (
     'cms.middleware.language.LanguageCookieMiddleware'
 )
 
+AUTHENTICATION_BACKENDS = (
+    'usosweb.UsosWebOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
@@ -105,7 +112,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'sekizai.context_processors.sekizai',
     'django.core.context_processors.static',
-    'cms.context_processors.cms_settings'
+    'cms.context_processors.cms_settings',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 TEMPLATE_DIRS = (
@@ -138,8 +147,9 @@ INSTALLED_APPS = (
     'djangocms_teaser',
     'djangocms_video',
     'reversion',
-    'DB_project',
-    'questions_and_ratings'
+    'questions_and_ratings',
+    'social.apps.django_app.default',
+
 )
 
 LANGUAGES = (
@@ -185,7 +195,8 @@ CMS_PLACEHOLDER_CONF = {}
 
 DATABASES = {
     'default':
-        {'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'project.db', 'HOST': 'localhost', 'USER': '', 'PASSWORD': '', 'PORT': ''}
+        {'ENGINE': 'django.db.backends.sqlite3', 'NAME': 'project.db', 'HOST': 'localhost', 'USER': '', 'PASSWORD': '',
+         'PORT': ''}
 }
 
 MIGRATION_MODULES = {
@@ -203,3 +214,4 @@ MIGRATION_MODULES = {
     'djangocms_teaser': 'djangocms_teaser.migrations_django',
     'djangocms_video': 'djangocms_video.migrations_django'
 }
+
