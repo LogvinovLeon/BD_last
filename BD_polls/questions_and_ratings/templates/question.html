@@ -1,0 +1,28 @@
+{% load sekizai_tags cms_tags %}
+<div id="question{{ question.id }}">
+</div>
+{#<h1>{% render_model question "text" %}</h1>#}
+{##}
+{#<form action="{% url 'question_vote' question.id %}" id="question_form">#}
+{#    {% csrf_token %}#}
+{#    {% for answer in question.questionanswer_set.all %}#}
+{#        <input type="{{ question.multiple_answers|yesno:"checkbox,radio" }}" name="answers"#}
+{#               id="answer{{ forloop.counter }}" value="{{ answer.id }}"/>#}
+{#        <label for="answer{{ forloop.counter }}">{{ answer.text }}</label><br/>#}
+{#    {% endfor %}#}
+{#    <input type="submit" class="btn btn-default"/>#}
+{#</form>#}
+{% addtoblock "js" %}
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "{% url 'question' question.id %}",
+                type: "GET",
+                success: function (data) {
+                    var questionId = "#question" + "{{ question.id }}";
+                    $(questionId).html(data);
+                }
+            });
+        });
+    </script>
+{% endaddtoblock %}

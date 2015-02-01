@@ -1,0 +1,11 @@
+{% load cms_tags %}
+<h1>{% render_model question "text" %}</h1>
+<form id="question_form">
+    {% csrf_token %}
+    {% for answer in question.answer_set.all %}
+        <input type="{{ question.multiple_answers|yesno:"checkbox,radio" }}" name="answers"
+               id="answer{{ forloop.counter }}" value="{{ answer.id }}"/>
+        <label for="answer{{ forloop.counter }}">{{ answer.text }}</label>
+        <br/>
+    {% endfor %}
+</form>
