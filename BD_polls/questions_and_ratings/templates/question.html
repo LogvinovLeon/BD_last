@@ -90,6 +90,6 @@
         func{{ question.id }}();
     </script>
 {% else %}
-    <h2>{% question.text %}</h2>
+    <h2>{{ question.text }}</h2>
     <h4>The user is not logged in. You should log in.</h4>
 {% endif %}
