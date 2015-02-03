@@ -150,6 +150,7 @@ INSTALLED_APPS = (
     'reversion',
     'questions_and_ratings',
     'social.apps.django_app.default',
+    'raports',
 
 )
 
