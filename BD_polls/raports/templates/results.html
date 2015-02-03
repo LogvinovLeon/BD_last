@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Raport{% endblock%}
+{% block content %}
+<ul>
+<br/>
+
+
+<form action="{% url 'generate' %}" method="get">
+    <h2> Oto wyniki raportu:</h2>
+    {% for q in results %}
+        <h3><b>{{q.0}}</b></h3>
+        {% for ans in q.1 %}
+            {{ans.0}}: {{ans.1}} <br>
+        {% endfor %}
+    {% endfor %}
+    <br/>
+</form>
+{% endblock %}
+</ul>
