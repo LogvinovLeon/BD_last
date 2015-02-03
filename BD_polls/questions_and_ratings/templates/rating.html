@@ -184,5 +184,4 @@
     {% endaddtoblock %}
 {% else %}
     <h4>The user is not logged in. You should log in, if you want to vote.</h4>
-    <a href="{% url 'social:begin' 'usosweb' %}?next={{ request.path }}">Login with Usosweb</a>
 {% endif %}

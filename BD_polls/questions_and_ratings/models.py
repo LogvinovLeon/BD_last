@@ -32,8 +32,11 @@ class Question(QuestionRatingMixin):
     multiple_answers = models.BooleanField(default=False)
 
     def get_results(self):
-        answers = QuestionAnswer.objects.filter(question=self)
-        return dict((answer.text, answer.questionvote_set.count()) for answer in answers)
+        if self.show_results_before_end or not self.is_active():
+            answers = QuestionAnswer.objects.filter(question=self)
+            return dict((answer.text, answer.questionvote_set.count()) for answer in answers)
+        else:
+            return None
 
 
 class QuestionAnswer(models.Model):
@@ -59,7 +62,10 @@ class Rating(QuestionRatingMixin):
     type = models.CharField(max_length=10, choices=TYPES)
 
     def get_results(self):
-        return dict((i, self.ratingvote_set.filter(value=i).count()) for i in range(1, self.max + 1))
+        if self.show_results_before_end or not self.is_active():
+            return dict((i, self.ratingvote_set.filter(value=i).count()) for i in range(1, self.max + 1))
+        else:
+            return None
 
 
 class RatingVote(VoteMixin):

@@ -14,6 +14,8 @@
 <div class="container">
     {% if user and not user.is_anonymous %}
         <a href="/logout" backgrou><img src="/media/logout-button-blue-hi.png"></a>
+    {% else %}
+        <a href="{% url 'social:begin' 'usosweb' %}?next={{ request.path }}">Login with Usosweb</a>
     {% endif %}
     <div class="navbar navbar-default" role="navigation">
         <div class="navbar-header">
