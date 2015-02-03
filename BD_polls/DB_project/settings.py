@@ -120,6 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'DB_project', 'templates'),
+    os.path.join(BASE_DIR),
 )
 
 INSTALLED_APPS = (
@@ -197,11 +198,11 @@ CMS_PLACEHOLDER_CONF = {}
 
 DATABASES = {
     'default':
-        {'ENGINE': 'django.db.backends.mysql', 
-	'NAME': 'll345374', 
-	'HOST': 'labdb.mimuw.edu.pl', 
-	'USER': 'll345374', 
-	'PASSWORD': 'CadBugwyChaylvuo',
+        {'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'll345374',
+         'HOST': 'labdb.mimuw.edu.pl',
+         'USER': 'll345374',
+         'PASSWORD': 'CadBugwyChaylvuo',
          'PORT': ''}
 }
 
@@ -223,4 +224,3 @@ MIGRATION_MODULES = {
 
 COMMENTS_APP = 'cmsplugin_comments'
 
-from config import *
