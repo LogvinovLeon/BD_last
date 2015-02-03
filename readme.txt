@@ -1,6 +1,6 @@
 1. Klonujemy repo
-2. Tworzymy nowego virtualenv'a
-3. Aktywujemy virtualenv'a
+2. Tworzymy nowego virtualenv'a: virtualenv venv
+3. Aktywujemy virtualenv'a: . venv/bin/activate
 4. Wchodzimy do folderu z projektem
 5. Wpisujemy "pip install -r requirements.txt"
 6. Wchodzimy do folderu DB_project i robimy:
