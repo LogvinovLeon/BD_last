@@ -1,7 +1,7 @@
 1. Klonujemy repo
 2. Tworzymy nowego virtualenv'a: virtualenv venv
 3. Aktywujemy virtualenv'a: . venv/bin/activate
-4. Wchodzimy do folderu z projektem
+4. Wchodzimy do folderu z projektem: cd BD_last/BD_polls
 5. Wpisujemy "pip install -r requirements.txt"
 6. Wchodzimy do folderu DB_project i robimy:
 export PYTHONPATH=$PYTHONPATH:$(pwd)
