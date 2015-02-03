@@ -1,13 +1,13 @@
-from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, render
-from django.views.decorators.http import require_http_methods
 from questions_and_ratings.models import Question, Rating
+
 
 def sview(request):
     q = Question.objects.all()
     r = Rating.objects.all()
     dictionary = {'qs': q, 'rs': r}
     return render(request, 'raports/templates/raports.html', dictionary)
+
 
 def generate(request):
     qs = Question.objects.all()
@@ -24,14 +24,14 @@ def generate(request):
     wanted_results = []
     for pk in q_list:
         if pk > 0:
-            q = get_object_or_404(Question, pk = pk)
+            q = get_object_or_404(Question, pk=pk)
         else:
-            q = get_object_or_404(Rating, pk = -pk)
+            q = get_object_or_404(Rating, pk=-pk)
         infos = []
         results = q.get_results()
         for key, value in results.iteritems():
-            infos.append((key.text, value))
-        wanted_results.append((q.text, infos))
+            infos.append((key, value))
+        wanted_results.append((q, infos))
     print wanted_results
     dictionary = {'results': wanted_results}
     return render(request, 'raports/templates/results.html', dictionary)
