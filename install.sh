@@ -1,5 +1,6 @@
 sudo apt-get update --fix-missing
 sudo apt-get install python-virtualenv
+sudo apt-get install python-dev
 virtualenv venv
 . venv/bin/activate
 cd BD_polls/
