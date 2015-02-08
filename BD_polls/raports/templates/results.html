@@ -8,10 +8,10 @@
         <h2> Oto wyniki raportu:</h2>
         {% for q in results %}
             <h3><b>{{ q.0 }}</b></h3>
-		<div id="container{{q.0}}" style="min-width: 500px; height: 400px; margin: 0 auto"></div>
+		<div id="container{{forloop.counter}}" style="min-width: 500px; height: 400px; margin: 0 auto"></div>
 		<script>
 			$(function () {
-    $('#container{{q.0}}').highcharts({
+    $('#container{{forloop.counter}}').highcharts({
         chart: {
             type: 'column'
         },
