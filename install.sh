@@ -1,11 +1,12 @@
 sudo apt-get update --fix-missing
 sudo apt-get install python-virtualenv
 sudo apt-get install python-dev
+cd BD_last
 virtualenv venv
 . venv/bin/activate
-cd BD_polls/
+cd BD_polls
 pip install -r requirements.txt
-export PYTHONPATH=$PYTHONPATH:$(pwd)/DB-project
+export PYTHONPATH=$PYTHONPATH:$(pwd)/DB_project
 ./manage.py makemigrations
 ./manage.py migrate
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
