@@ -1,5 +1,5 @@
 import os
-
+from config import *
 gettext = lambda s: s
 DATA_DIR = os.path.dirname(os.path.dirname(__file__))
 """
