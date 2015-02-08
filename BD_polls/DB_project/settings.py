@@ -198,11 +198,11 @@ CMS_PLACEHOLDER_CONF = {}
 
 DATABASES = {
     'default':
-        {'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'll345374',
-         'HOST': 'labdb.mimuw.edu.pl',
-         'USER': 'll345374',
-         'PASSWORD': 'CadBugwyChaylvuo',
+        {'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': 'test.db',
+         'HOST': '',
+         'USER': '',
+         'PASSWORD': '',
          'PORT': ''}
 }
 

@@ -1,19 +1,57 @@
 {% extends 'base.html' %}
-{% block title %}Raport{% endblock%}
+{% block title %}Raport{% endblock %}
 {% block content %}
-<ul>
-<br/>
-
-
-<form action="{% url 'generate' %}" method="get">
-    <h2> Oto wyniki raportu:</h2>
-    {% for q in results %}
-        <h3><b>{{q.0}}</b></h3>
-        {% for ans in q.1 %}
-            {{ans.0}}: {{ans.1}} <br>
-        {% endfor %}
-    {% endfor %}
+    <ul>
     <br/>
-</form>
+    <form action="{% url 'generate' %}" method="get">..
+
+        <h2> Oto wyniki raportu:</h2>
+        {% for q in results %}
+            <h3><b>{{ q.0 }}</b></h3>
+		<div id="container{{q.0}}" style="min-width: 500px; height: 400px; margin: 0 auto"></div>
+		<script>
+			$(function () {
+    $('#container{{q.0}}').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: '{{q.0}}'
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: 'Votes'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        series: [{
+            data: [
+		{% for ans in q.1 %}
+			[{{ans.0}}, {{ans.1}}],
+		{% endfor %}
+            ],
+            dataLabels: {
+                enabled: true,
+                rotation: -90,
+                color: '#FFFFFF',
+                align: 'right',
+                x: 4,
+                y: 10,
+                style: {
+                    fontSize: '13px',
+                    fontFamily: 'Verdana, sans-serif',
+                    textShadow: '0 0 3px black'
+                }
+            }
+        }]
+    });
+});
+		</script>            
+        {% endfor %}
+        <br/>
+    </form>
 {% endblock %}
 </ul>

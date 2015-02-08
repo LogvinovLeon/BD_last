@@ -18,9 +18,9 @@ def generate(request):
             q_list.append(q.id)
     rs = Rating.objects.all()
     for r in rs:
-        is_on = request.GET.get('r' + str(q.id), 'f')
+        is_on = request.GET.get('r' + str(r.id), 'f')
         if is_on == "on":
-            q_list.append(-q.id)
+            q_list.append(-r.id)
     wanted_results = []
     for pk in q_list:
         if pk > 0:
