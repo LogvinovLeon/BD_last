@@ -1,6 +1,5 @@
 sudo apt-get update --fix-missing
-sudo apt-get install python-virtualenv
-sudo apt-get install python-dev
+sudo apt-get install -y python-virtualenv python-dev
 cd BD_last
 virtualenv venv
 . venv/bin/activate
