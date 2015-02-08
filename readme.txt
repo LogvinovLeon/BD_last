@@ -6,4 +6,4 @@ git clone https://github.com/LogvinovLeon/BD_last.git
 
 If your port 8000 is user you need to run:
 ./manage.py runserver 0.0.0.0:PORT
-Where PORT is unuser port.
+Where PORT is an unuser port.
